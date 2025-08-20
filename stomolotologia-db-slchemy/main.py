@@ -28,7 +28,6 @@ Session = sessionmaker(bind=engine)
 
 @app.route("/")
 def index():
-    print("vgh") # лишний принт 
     return render_template("index.html")
 
 @app.route("/api/add_user", methods=["POST"])
@@ -100,5 +99,6 @@ def get_notes(): # нужно добавить try-except
 
 if __name__ == "__main__":
     app.run(debug=True,port = 5001)
+
 
 
