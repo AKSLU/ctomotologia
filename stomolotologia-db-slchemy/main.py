@@ -6,6 +6,7 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 Base = declarative_base()
 
+# КЛАССЫ И МОДЕЛИ должны быть в отдельных файлах models.py
 class Client(Base):
     __tablename__ = "clients"
     id = Column(Integer, primary_key=True)
@@ -21,17 +22,17 @@ class Note(Base):
     date = Column(Date, default=datetime.date.today)
     client_id = Column(Integer)
 
-engine = create_engine("sqlite:///example.db", echo=True)
-Base.metadata.create_all(engine)
+engine = create_engine("sqlite:///example.db", echo=True) # эти строки тоже должны быть в файле database.py
+Base.metadata.create_all(engine) # эти строки тоже должны быть в файле database.py
 Session = sessionmaker(bind=engine)
 
 @app.route("/")
 def index():
-    print("vgh")
+    print("vgh") # лишний принт 
     return render_template("index.html")
 
 @app.route("/api/add_user", methods=["POST"])
-def add_user():
+def add_user(): # нужно добавить try-except
     data = request.form
     session = Session()
     new_client = Client(
@@ -44,7 +45,7 @@ def add_user():
     return "Пользователь добавлен"
 
 @app.route("/api/add_note", methods=["POST"])
-def add_note():
+def add_note(): # нужно добавить try-except
     data = request.form
     session = Session()
     new_note = Note(
@@ -58,7 +59,7 @@ def add_note():
     return "Заметка добавлена"
 
 @app.route("/api/remove_user", methods=["POST"])
-def remove_user():
+def remove_user(): # нужно добавить try-except
     data = request.form
     session = Session()
     client = session.query(Client).get(int(data["id"]))
@@ -69,7 +70,7 @@ def remove_user():
     return "Пользователь не найден"
 
 @app.route("/api/remove_note", methods=["POST"])
-def remove_note():
+def remove_note(): # нужно добавить try-except
     data = request.form
     session = Session()
     note = session.query(Note).get(int(data["id"]))
@@ -80,7 +81,7 @@ def remove_note():
     return "Заметка не найдена"
 
 @app.route("/api/get_stats", methods=["GET"])
-def get_stats():
+def get_stats(): # нужно добавить try-except
     session = Session()
     clients = session.query(Client).all()
     result = ""
@@ -89,7 +90,7 @@ def get_stats():
     return result
 
 @app.route("/api/get_notes", methods=["GET"])
-def get_notes():
+def get_notes(): # нужно добавить try-except
     session = Session()
     notes = session.query(Note).all()
     result = ""
@@ -99,4 +100,5 @@ def get_notes():
 
 if __name__ == "__main__":
     app.run(debug=True,port = 5001)
+
 
